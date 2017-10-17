@@ -6,7 +6,7 @@ JAVA_VERSION=$1
 TYPE=$2
 
 if [ "$#" != "2" ]; then
-  echo "USAGE: jenkinsPreReqs.sh <JRE RPM> <MASTER|SLAVE>
+  echo "USAGE: jenkinsPreReqs.sh <JRE RPM> <MASTER|SLAVE>"
   exit 1
 fi
 
@@ -29,8 +29,8 @@ if [ "$?" -eq "0" ]; then
       useradd -d /var/lib/jenkins jenkins
       if getent passwd jenkins > /dev/null 2>&1; then
          echo "Successfully created Jenkins user"
-         if [ "$TYPE" -eq "SLAVE" ]; then
-            echo "Setting up ssh dir for authorized_keys on slave""
+         if [ "$TYPE" eq "SLAVE" ]; then
+            echo "Setting up ssh dir for authorized_keys on slave"
             su - jenkins -c "mkdir /var/lib/jenkins/.ssh"
             su - jenkins -c "touch /var/lib/jenkins/.ssh/authorized_keys"
          fi
