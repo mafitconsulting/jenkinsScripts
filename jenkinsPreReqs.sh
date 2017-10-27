@@ -10,6 +10,30 @@ if [ "$#" != "2" ]; then
   exit 1
 fi
 
+installJenkins () {
+  echo "Creating Jenkins repo and installing Jenkins Master"
+  wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+  rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+  yum install -y jenkins-2.19.4-1.1
+  if [ "$?" -eq "0" ]; then
+    echo "Jenkins installed successfully"
+    systemctl start jenkins
+    if [ "$?" -eq "0" ]; then
+        systemctl enable jenkins
+        echo "Jenkins service started and enabled"
+    else
+        echo "Could not started Jenkins server"
+        exit 13
+    fi
+  else
+    echo "Jenkins installation failed"
+    exit 123
+  fi
+}
+     
+
+
+
 # Install Java rpm
 
 echo "Installing Java.. please wait.."
@@ -29,10 +53,12 @@ if [ "$?" -eq "0" ]; then
       useradd -d /var/lib/jenkins jenkins
       if getent passwd jenkins > /dev/null 2>&1; then
          echo "Successfully created Jenkins user"
-         if [ "$TYPE" eq "SLAVE" ]; then
+         if [ "$TYPE" == "SLAVE" ]; then
             echo "Setting up ssh dir for authorized_keys on slave"
             su - jenkins -c "mkdir /var/lib/jenkins/.ssh"
             su - jenkins -c "touch /var/lib/jenkins/.ssh/authorized_keys"
+         else
+            installJenkins()
          fi
       else
          echo "Problem creating Jenkins users"
@@ -46,5 +72,6 @@ else
    echo "Problem installing java..."
    exit 5
 fi
+
 
 
