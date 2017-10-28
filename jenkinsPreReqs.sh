@@ -1,5 +1,6 @@
 #!/bin/bash
-# Add java prereqs for Jenkins slave
+# Installs Jenkins Master or Slave with
+# 2.19.4-1.1 (open source CJE level)
 
 set -x
 
