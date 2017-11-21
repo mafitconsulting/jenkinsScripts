@@ -97,7 +97,7 @@ else
   if [ "$?" -eq "0" ]; then
      prereq
      if [ "$RC" -eq "0" ]; then
-        if [ "$TYPE" -ne "SLAVE"]; then
+        if [ "$TYPE" -ne "SLAVE" ]; then
            installJenkins
            if [ "$RC" -eq "0" ]; then
               echo "Jenkins installed successfully"
@@ -106,7 +106,7 @@ else
            fi
         else
            echo "Slave server, exiting cleanly"
-           exit 0`
+           exit 0
         fi
      else
         echo "Jenkins prereqs failed"
